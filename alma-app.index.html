@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FDF6EE">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Alma - Tu compañero de bienestar emocional">
+<title>Alma — Bienestar Emocional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF6EE;
+    --warm-beige: #F5EBD8;
+    --peach: #F2C9A0;
+    --terracotta: #C97B4B;
+    --rust: #A0522D;
+    --deep-brown: #4A2C1A;
+    --sage: #8FAF8A;
+    --sage-light: #D4E8D0;
+    --lavender: #C8B8D8;
+    --lavender-light: #EDE6F5;
+    --sky: #A8C8E0;
+    --sky-light: #DFF0F8;
+    --blush: #F0B8B0;
+    --blush-light: #FCEAE8;
+    --sunflower: #F2D080;
+    --sunflower-light: #FDF4CC;
+    --text-dark: #3A2010;
+    --text-mid: #7A5A40;
+    --text-light: #B09070;
+    --white: #FFFFFF;
+    --shadow: rgba(74, 44, 26, 0.08);
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* NAVIGATION */
+  .nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    background: var(--white);
+    border-top: 1px solid rgba(201,123,75,0.15);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    z-index: 100;
+    box-shadow: 0 -4px 20px var(--shadow);
+  }
+
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px 16px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    color: var(--text-light);
+  }
+
+  .nav-btn.active { color: var(--terracotta); }
+
+  .nav-btn svg { width: 22px; height: 22px; stroke-width: 1.8; }
+
+  .nav-btn span { font-size: 10px; font-weight: 500; letter-spacing: 0.3px; }
+
+  /* PAGES */
+  .page { display: none; padding: 0 0 90px 0; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* HEADER */
+  .page-header {
+    padding: 52px 24px 20px;
+    position: relative;
+  }
+
+  .greeting {
+    font-family: 'Lora', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .greeting-sub {
+    font-size: 14px;
+    color: var(--text-mid);
+    font-weight: 300;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin: 0 16px 16px;
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+
+  .card-title {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title svg { width: 18px; height: 18px; color: var(--terracotta); flex-shrink: 0; }
+
+  /* MOOD SELECTOR */
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .mood-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: var(--warm-beige);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 12px 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mood-btn:hover { background: var(--peach); transform: translateY(-1px); }
+  .mood-btn.selected { border-color: var(--terracotta); background: var(--blush-light); }
+
+  .mood-emoji { font-size: 26px; line-height: 1; }
+  .mood-label { font-size: 10px; color: var(--text-mid); font-weight: 500; text-align: center; }
+
+  /* INTENSITY SLIDER */
+  .intensity-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .intensity-label { font-size: 13px; color: var(--text-mid); min-width: 60px; }
+
+  .custom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--terracotta) var(--val, 50%), var(--warm-beige) var(--val, 50%));
+    outline: none;
+    cursor: pointer;
+  }
+
+  .custom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    box-shadow: 0 2px 8px rgba(201,123,75,0.4);
+    cursor: pointer;
+  }
+
+  .intensity-val {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--terracotta);
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* TEXT AREA */
+  .journal-input {
+    width: 100%;
+    background: var(--warm-beige);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    resize: none;
+    height: 90px;
+    outline: none;
+    line-height: 1.6;
+    transition: background 0.2s;
+  }
+
+  .journal-input:focus { background: var(--peach); }
+  .journal-input::placeholder { color: var(--text-light); }
+
+  /* PRIMARY BUTTON */
+  .btn-primary {
+    width: 100%;
+    background: var(--terracotta);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary:hover { background: var(--rust); transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    background: var(--warm-beige);
+    color: var(--terracotta);
+    border: 1.5px solid var(--peach);
+    border-radius: var(--radius-xl);
+    padding: 12px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-secondary:hover { background: var(--peach); }
+
+  /* AI RESPONSE */
+  .ai-response-box {
+    background: linear-gradient(135deg, var(--lavender-light), var(--blush-light));
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    border: 1px solid rgba(200, 184, 216, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ai-response-box::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, rgba(200,184,216,0.3), transparent 70%);
+    border-radius: 50%;
+  }
+
+  .ai-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lavender);
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .ai-label svg { width: 12px; height: 12px; }
+
+  .ai-text {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .ai-loading {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .dot {
+    width: 7px; height: 7px;
+    background: var(--lavender);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  /* HOME PAGE DECORATIVE HEADER */
+  .hero-bg {
+    background: linear-gradient(160deg, var(--warm-beige) 0%, var(--cream) 60%);
+    padding: 52px 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, var(--peach) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+  }
+
+  /* HISTORY ITEMS */
+  .history-item {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: 0 1px 8px var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .history-emoji-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .history-info { flex: 1; min-width: 0; }
+
+  .history-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+  }
+
+  .history-time { font-size: 11px; color: var(--text-light); }
+  .history-mood-name { font-size: 14px; font-weight: 500; color: var(--text-dark); }
+  .history-snippet { font-size: 12px; color: var(--text-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .history-score {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--terracotta);
+    background: var(--blush-light);
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+
+  /* MEDITATION / CONTENT CARDS */
+  .content-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: 0 16px 14px;
+    box-shadow: 0 2px 12px var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .content-card:hover { transform: translateY(-2px); }
+
+  .content-card-header {
+    padding: 18px 18px 14px;
+    position: relative;
+  }
+
+  .content-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  .tag-meditate { background: var(--sky-light); color: var(--sky); }
+  .tag-affirm { background: var(--lavender-light); color: #8A6FAA; }
+  .tag-breathe { background: var(--sage-light); color: #4A7A45; }
+  .tag-reflect { background: var(--sunflower-light); color: #9A7010; }
+
+  .content-card-title {
+    font-family: 'Lora', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+
+  .content-card-desc {
+    font-size: 13px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .content-card-footer {
+    padding: 10px 18px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--warm-beige);
+  }
+
+  .content-duration {
+    font-size: 12px;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .content-duration svg { width: 13px; height: 13px; }
+
+  .play-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .play-btn:hover { background: var(--rust); transform: scale(1.05); }
+  .play-btn svg { width: 14px; height: 14px; fill: white; stroke: none; margin-left: 2px; }
+
+  /* STREAK WIDGET */
+  .streak-row {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+
+  .streak-card {
+    flex: 1;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: 0 1px 8px var(--shadow);
+  }
+
+  .streak-num {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--terracotta);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .streak-label { font-size: 11px; color: var(--text-mid); }
+
+  /* AFFIRMATION CARD */
+  .affirmation-main {
+    margin: 0 16px 16px;
+    background: linear-gradient(135deg, var(--warm-beige), var(--peach));
+    border-radius: var(--radius-lg);
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .affirmation-main::before {
+    content: '"';
+    position: absolute;
+    top: -10px; left: 8px;
+    font-size: 120px;
+    font-family: 'Lora', serif;
+    color: rgba(201,123,75,0.15);
+    line-height: 1;
+  }
+
+  .affirmation-text {
+    font-family: 'Lora', serif;
+    font-size: 19px;
+    color: var(--text-dark);
+    line-height: 1.55;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 16px;
+  }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(58, 32, 16, 0.5);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal-sheet {
+    background: var(--cream);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    width: 100%;
+    max-width: 430px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--peach);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .modal-subtitle {
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  /* BREATHING EXERCISE */
+  .breathing-circle-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .breathing-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--sky-light), var(--lavender-light));
+    border: 3px solid var(--sky);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    text-align: center;
+    line-height: 1.4;
+    transition: transform 4s ease-in-out;
+    margin-bottom: 20px;
+  }
+
+  .breathing-circle.inhale { transform: scale(1.3); }
+  .breathing-circle.exhale { transform: scale(0.9); }
+  .breathing-circle.hold { transform: scale(1.3); }
+
+  .breathing-phase {
+    font-size: 14px;
+    color: var(--text-mid);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .breathing-count {
+    font-family: 'Lora', serif;
+    font-size: 36px;
+    color: var(--terracotta);
+    text-align: center;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 0 16px;
+    margin: 20px 0 12px;
+  }
+
+  /* TODAY TAG */
+  .today-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--sage-light);
+    color: #4A7A45;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .today-tag svg { width: 12px; height: 12px; }
+
+  /* WEEK CHART */
+  .week-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 80px;
+    padding: 0 4px;
+    margin-bottom: 8px;
+  }
+
+  .week-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+  .week-bar {
+    width: 100%;
+    background: var(--warm-beige);
+    border-radius: 6px;
+    min-height: 8px;
+    transition: height 0.4s ease;
+    position: relative;
+  }
+
+  .week-bar.filled { background: var(--terracotta); }
+  .week-bar-day { font-size: 10px; color: var(--text-light); }
+
+  /* PROFILE */
+  .profile-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--peach), var(--lavender));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    color: var(--white);
+    margin: 0 auto 12px;
+    box-shadow: 0 4px 20px rgba(201,123,75,0.3);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--deep-brown);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: var(--radius-xl);
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 300;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* UTIL */
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .text-center { text-align: center; }
+  .flex-row { display: flex; align-items: center; gap: 10px; }
+  .flex-between { display: flex; align-items: center; justify-content: space-between; }
+
+  /* CHECKIN DONE SCREEN */
+  .done-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .done-screen.visible { display: flex; }
+
+  .done-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--sage-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 16px;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .scroll-fade { animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGES -->
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero-bg">
+    <div class="today-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span id="time-label">Buenos días</span>
+    </div>
+    <div class="greeting" id="greeting-text">¿Cómo amaneces hoy?</div>
+    <div class="greeting-sub" id="date-text"></div>
+  </div>
+
+  <!-- STREAKS -->
+  <div class="streak-row mt-12">
+    <div class="streak-card">
+      <div class="streak-num" id="streak-count">0</div>
+      <div class="streak-label">días seguidos 🔥</div>
+    </div>
+    <div class="streak-card">
+      <div class="streak-num" id="checkin-total">0</div>
+      <div class="streak-label">check-ins totales</div>
+    </div>
+    <div class="streak-card">
+      <div class="streak-num" id="avg-mood">—</div>
+      <div class="streak-label">ánimo promedio</div>
+    </div>
+  </div>
+
+  <!-- AFFIRMATION OF THE DAY -->
+  <div class="section-label">Afirmación del día</div>
+  <div class="affirmation-main">
+    <div class="affirmation-text" id="daily-affirmation">Cargando tu afirmación del día...</div>
+    <button class="btn-secondary" onclick="newAffirmation()" style="font-size:13px; padding: 9px 18px;">
+      Nueva afirmación ✦
+    </button>
+  </div>
+
+  <!-- WEEKLY MOOD CHART -->
+  <div class="card">
+    <div class="card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Tu semana
+    </div>
+    <div class="week-chart" id="week-chart"></div>
+    <div style="text-align:center; font-size:12px; color:var(--text-light); margin-top: 4px;" id="week-note">Registra tus emociones para ver tu progreso</div>
+  </div>
+
+  <!-- QUICK CHECK-IN CTA -->
+  <div class="card" style="background: linear-gradient(135deg, var(--blush-light), var(--lavender-light)); border: none;">
+    <div class="card-title" style="margin-bottom: 10px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      Momento para ti
+    </div>
+    <p style="font-size:13px; color:var(--text-mid); margin-bottom: 14px; line-height: 1.6;">Tómate un momento para conectar con tus emociones. El bienestar empieza con escucharte.</p>
+    <button class="btn-primary" onclick="goToCheckin()">Iniciar check-in emocional</button>
+  </div>
+</div>
+
+<!-- CHECK-IN -->
+<div id="page-checkin" class="page">
+  <div class="page-header">
+    <div class="greeting" id="checkin-title">Check-in de la tarde</div>
+    <div class="greeting-sub">Tómate 2 minutos para ti</div>
+  </div>
+
+  <!-- FORM -->
+  <div id="checkin-form" class="scroll-fade">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        ¿Cómo te sientes ahora?
+      </div>
+      <div class="mood-grid" id="mood-grid"></div>
+      <div class="intensity-row">
+        <span class="intensity-label" style="font-size:12px;">Intensidad</span>
+        <input type="range" min="1" max="10" value="5" class="custom-slider" id="intensity-slider">
+        <span class="intensity-val" id="intensity-val">5</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        ¿Qué hay en tu mente?
+      </div>
+      <textarea class="journal-input" id="journal-text" placeholder="Escribe lo que quieras... no hay respuestas incorrectas 🌿"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        ¿Qué influyó en tu estado?
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="factor-pills"></div>
+    </div>
+
+    <div style="padding: 0 16px 16px;">
+      <button class="btn-primary" id="submit-btn" onclick="submitCheckin()">Obtener mi consejo personalizado ✨</button>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="checkin-done" class="done-screen">
+    <div class="done-icon">🌸</div>
+    <div style="font-family: 'Lora', serif; font-size: 22px; color: var(--text-dark); margin-bottom: 8px;">¡Bien hecho!</div>
+    <div style="font-size: 14px; color: var(--text-mid); margin-bottom: 24px; line-height: 1.6; max-width: 280px;">Escucharte es el primer paso. Aquí está tu consejo de hoy:</div>
+
+    <div style="width: 100%; max-width: 360px; margin-bottom: 20px;">
+      <div class="ai-response-box" id="ai-response-box">
+        <div class="ai-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 4a6 6 0 1 1-6 6 6 6 0 0 1 6-6zm0 2a1 1 0 1 0 1 1 1 1 0 0 0-1-1z"/></svg>
+          Consejo de Alma
+        </div>
+        <div id="ai-advice-text" class="ai-text">
+          <div class="ai-loading"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; width: 100%; max-width: 360px;">
+      <button class="btn-secondary" style="flex:1" onclick="goToPage('page-explore')">Explorar recursos</button>
+      <button class="btn-primary" style="flex:1" onclick="goToPage('page-home')">Volver al inicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPLORE -->
+<div id="page-explore" class="page">
+  <div class="page-header">
+    <div class="greeting">Explora</div>
+    <div class="greeting-sub">Herramientas para tu bienestar</div>
+  </div>
+
+  <div class="section-label">Para este momento</div>
+
+  <!-- BREATHING -->
+  <div class="content-card" onclick="openBreathing()">
+    <div class="content-card-header" style="background: linear-gradient(135deg, var(--sky-light), var(--cream));">
+      <span class="content-tag tag-breathe">Respiración</span>
+      <div class="content-card-title">Respiración 4-4-4</div>
+      <div class="content-card-desc">Calma tu sistema nervioso con esta técnica de respiración cuadrada.</div>
+    </div>
+    <div class="content-card-footer">
+      <span class="content-duration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        5 minutos
+      </span>
+      <button class="play-btn" onclick="openBreathing(event)">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- MEDITATIONS -->
+  <div id="meditation-cards"></div>
+
+  <div class="section-label">Afirmaciones</div>
+  <div id="affirmation-cards"></div>
+
+  <div class="section-label">Reflexiones guiadas</div>
+  <div id="reflection-cards"></div>
+</div>
+
+<!-- HISTORY -->
+<div id="page-history" class="page">
+  <div class="page-header">
+    <div class="greeting">Mi historial</div>
+    <div class="greeting-sub">Tu camino emocional</div>
+  </div>
+
+  <div id="history-list">
+    <div style="text-align:center; padding: 40px 20px; color: var(--text-light);">
+      <div style="font-size: 40px; margin-bottom: 12px;">🌱</div>
+      <div style="font-size: 14px; line-height: 1.6;">Aún no hay registros.<br>¡Haz tu primer check-in hoy!</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- BREATHING MODAL -->
+<div class="modal-overlay" id="breathing-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Respiración 4-4-4</div>
+    <div class="modal-subtitle">Inhala, sostén y exhala durante 4 segundos cada vez. Repite 4 ciclos para calmar tu mente.</div>
+    <div class="breathing-circle-wrap">
+      <div class="breathing-circle" id="breath-circle">Presiona<br>iniciar</div>
+      <div class="breathing-phase" id="breath-phase">¿Listo para empezar?</div>
+      <div class="breathing-count" id="breath-count" style="visibility:hidden;">4</div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top: 8px;">
+      <button class="btn-secondary" style="flex:1" onclick="closeModal('breathing-modal')">Cerrar</button>
+      <button class="btn-primary" style="flex:1" id="breath-btn" onclick="toggleBreathing()">Iniciar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT MODAL -->
+<div class="modal-overlay" id="content-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="content-modal-title"></div>
+    <div class="modal-subtitle" id="content-modal-sub"></div>
+    <div style="background: var(--warm-beige); border-radius: var(--radius-md); padding: 18px; margin-bottom: 16px;">
+      <div style="font-family: 'Lora', serif; font-size: 15px; color: var(--text-dark); line-height: 1.75; font-style: italic;" id="content-modal-body"></div>
+    </div>
+    <button class="btn-primary" onclick="closeModal('content-modal')">Cerrar</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="nav-bar">
+  <button class="nav-btn active" onclick="goToPage('page-home')" id="nav-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Inicio</span>
+  </button>
+  <button class="nav-btn" onclick="goToPage('page-checkin')" id="nav-checkin">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Check-in</span>
+  </button>
+  <button class="nav-btn" onclick="goToPage('page-explore')" id="nav-explore">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+    <span>Explorar</span>
+  </button>
+  <button class="nav-btn" onclick="goToPage('page-history')" id="nav-history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Historial</span>
+  </button>
+</nav>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+
+const MOODS = [
+  { emoji: '😊', label: 'Feliz', value: 8, color: '#FFF8CC' },
+  { emoji: '😌', label: 'Tranquilo', value: 7, color: '#D4E8D0' },
+  { emoji: '😐', label: 'Neutral', value: 5, color: '#F5EBD8' },
+  { emoji: '😔', label: 'Triste', value: 3, color: '#DFF0F8' },
+  { emoji: '😰', label: 'Ansioso', value: 2, color: '#FCEAE8' },
+  { emoji: '😤', label: 'Enojado', value: 2, color: '#FCEAE8' },
+  { emoji: '😩', label: 'Agotado', value: 3, color: '#EDE6F5' },
+  { emoji: '🥰', label: 'Amado', value: 9, color: '#FFF0F5' },
+];
+
+const FACTORS = ['Trabajo', 'Familia', 'Sueño', 'Comida', 'Ejercicio', 'Redes sociales', 'Noticias', 'Relaciones', 'Dinero', 'Salud'];
+
+const AFFIRMATIONS = [
+  'Soy suficiente exactamente como soy en este momento.',
+  'Mis emociones son válidas y merecen ser escuchadas.',
+  'Cada día avanzo un poco más hacia mi mejor versión.',
+  'Tengo la fortaleza para afrontar lo que venga hoy.',
+  'Me permito descansar sin sentir culpa.',
+  'Elijo soltar lo que no puedo controlar.',
+  'Soy merecedor/a de amor, paz y alegría.',
+  'Mi bienestar es una prioridad, no un lujo.',
+  'Confío en el proceso de mi vida.',
+  'Estoy aprendiendo y creciendo todos los días.',
+];
+
+const MEDITATIONS = [
+  { tag: 'Meditación', tagClass: 'tag-meditate', title: 'Conexión con el presente', desc: 'Ancla tu atención al momento presente y suelta las preocupaciones del pasado y futuro.', duration: '8 minutos', body: '🌬️ Encuentra una posición cómoda...\n\nCierra los ojos suavemente. Siente el peso de tu cuerpo sobre la superficie donde estás. Comienza a notar tu respiración, sin intentar cambiarla.\n\nInhala lentamente... y exhala despacio.\n\n🌿 Ahora lleva tu atención a los sonidos a tu alrededor. No los juzgues, solo obsérvalos como nubes que pasan. Tus pensamientos también son así: aparecen y se van.\n\n✨ Regresa siempre a tu respiración. Aquí estás. Aquí es el único lugar donde puedes estar. El presente siempre es seguro.\n\nPermanece así por unos minutos. Cuando estés listo, abre los ojos con calma.' },
+  { tag: 'Meditación', tagClass: 'tag-meditate', title: 'Liberando la ansiedad', desc: 'Aprende a reconocer y soltar la tensión acumulada con gentileza.', duration: '10 minutos', body: '💙 Esta meditación es para ti, exactamente como estás ahora...\n\nSiéntate o recuéstate cómodamente. Toma tres respiraciones profundas, más lentas de lo normal.\n\n🫁 Al inhalar, imagina que absorbes calma y espacio. Al exhalar, suelta cualquier tensión que cargues.\n\n🌊 Escanea tu cuerpo desde la cabeza hacia los pies. ¿Dónde sientes tensión? Sin forzar nada, solo observa. Respira hacia esos lugares.\n\n💭 Si tu mente se va a preocupaciones, simplemente di "gracias, mente" y vuelve a tu respiración. No hay error posible en esto.\n\nRecuerda: la ansiedad es una señal, no una sentencia. Eres más grande que cualquier pensamiento que tengas.' },
+];
+
+const REFLECTIONS = [
+  { tag: 'Reflexión', tagClass: 'tag-reflect', title: '¿Qué necesito hoy?', desc: 'Una pregunta poderosa para conectar con tus necesidades reales.', duration: '5 min lectura', body: '🌱 Pregúntate en silencio: ¿qué necesito hoy?\n\nNo lo que debería necesitar, no lo que otros esperan — ¿qué necesita genuinamente tu ser en este momento?\n\nQuizás es descanso. Quizás es movimiento. Quizás es una conversación honesta, o simplemente silencio.\n\n💛 Escribe en tu diario (o mentalmente): Hoy me doy permiso de necesitar ______.\n\nLas necesidades no son caprichos. Son señales de tu cuerpo y mente diciéndote cómo cuidarte. Honrarlas es un acto de amor propio.\n\n✍️ Ejercicio: Escribe 3 cosas que necesitas hoy y una pequeña acción para cada una.' },
+  { tag: 'Reflexión', tagClass: 'tag-reflect', title: 'El peso del sobreestimulo', desc: 'Por qué tantos estímulos nos agotan y cómo crear espacios de calma.', duration: '4 min lectura', body: '📱 Vivimos en un mundo diseñado para capturar nuestra atención...\n\nCada notificación, cada scroll, cada noticia activa una pequeña respuesta de estrés en nuestro cerebro. Acumuladas durante horas, nos dejan agotados sin saber por qué.\n\n🧠 Esto se llama "fatiga de decisiones" y "sobreestimulación cognitiva". No es debilidad — es biología.\n\n🌿 Algunas pausas que funcionan:\n• 20 minutos sin pantallas al despertar\n• Caminatas sin auriculares\n• Comidas sin teléfono\n• Un "modo no molestar" de 21:00 a 08:00\n\nNo necesitas hacer todo. Elige una sola cosa y pruébala esta semana. Tu mente te lo agradecerá.' },
+];
+
+const AFFIRMATION_CARDS = [
+  { tag: 'Afirmación', tagClass: 'tag-affirm', title: 'Soy suficiente', desc: 'Para los días en que el perfeccionismo te pesa.', duration: '2 min', body: '🌸 Repite estas palabras, en silencio o en voz alta:\n\n"Soy suficiente, ahora mismo, tal como estoy."\n"No necesito ser perfecto/a para merecer amor."\n"Mi valor no depende de mi productividad."\n"Me acepto a mí mismo/a con compasión."\n\n💛 Coloca una mano en tu corazón. Siente el calor de tu propia mano.\n\nDi: "Estoy aquí. Estoy bien. Soy suficiente."\n\nRepite esto cada mañana durante una semana y nota cómo cambia tu relación contigo mismo/a.' },
+  { tag: 'Afirmación', tagClass: 'tag-affirm', title: 'Soltar el control', desc: 'Para calmar la mente cuando todo parece incierto.', duration: '3 min', body: '🍃 Hay cosas que puedes controlar y cosas que no...\n\nPuedes controlar: tus acciones, tus palabras, tu respuesta a las situaciones.\n\nNo puedes controlar: el pasado, el futuro, las decisiones de otros, el mundo.\n\n✨ Afirmaciones para soltar:\n"Confío en que las cosas se acomodan."\n"Hago lo que puedo y suelto el resto."\n"No necesito tener todo resuelto hoy."\n"La incertidumbre también es parte de la vida."\n\n🌊 Visualiza tus preocupaciones como hojas en un río. Obsérvalas pasar sin aferrarte a ellas.' },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+let selectedMood = null;
+let selectedFactors = new Set();
+let history = JSON.parse(localStorage.getItem('alma_history') || '[]');
+let affirmationIdx = Math.floor(Math.random() * AFFIRMATIONS.length);
+let breathingActive = false;
+let breathInterval = null;
+let breathPhase = 'inhale';
+let breathSec = 4;
+let breathCycles = 0;
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDateTime();
+  renderMoodGrid();
+  renderFactors();
+  renderExplore();
+  renderHistory();
+  updateStats();
+  renderWeekChart();
+  document.getElementById('daily-affirmation').textContent = AFFIRMATIONS[affirmationIdx];
+
+  const slider = document.getElementById('intensity-slider');
+  slider.addEventListener('input', () => {
+    const val = slider.value;
+    document.getElementById('intensity-val').textContent = val;
+    slider.style.setProperty('--val', (val - 1) / 9 * 100 + '%');
+  });
+  slider.style.setProperty('--val', '44%');
+});
+
+function initDateTime() {
+  const now = new Date();
+  const h = now.getHours();
+  let timeLabel = h < 12 ? 'Buenos días' : h < 18 ? 'Buenas tardes' : 'Buenas noches';
+  let greeting = h < 12 ? '¿Cómo amaneces hoy?' : h < 18 ? '¿Cómo va tu tarde?' : '¿Cómo terminó tu día?';
+  let checkinTitle = h < 15 ? 'Check-in de la mañana' : 'Check-in nocturno';
+
+  document.getElementById('time-label').textContent = timeLabel;
+  document.getElementById('greeting-text').textContent = greeting;
+  document.getElementById('checkin-title').textContent = checkinTitle;
+
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('date-text').textContent = now.toLocaleDateString('es-ES', opts);
+}
+
+function renderMoodGrid() {
+  const grid = document.getElementById('mood-grid');
+  grid.innerHTML = MOODS.map((m, i) => `
+    <button class="mood-btn" onclick="selectMood(${i})" id="mood-${i}" style="background:${m.color}">
+      <span class="mood-emoji">${m.emoji}</span>
+      <span class="mood-label">${m.label}</span>
+    </button>
+  `).join('');
+}
+
+function renderFactors() {
+  const wrap = document.getElementById('factor-pills');
+  wrap.innerHTML = FACTORS.map(f => `
+    <button class="btn-secondary" style="font-size:12px; padding: 7px 14px; border-radius: 20px;" onclick="toggleFactor('${f}', this)">${f}</button>
+  `).join('');
+}
+
+function renderExplore() {
+  document.getElementById('meditation-cards').innerHTML = MEDITATIONS.map(c => contentCardHTML(c)).join('');
+  document.getElementById('affirmation-cards').innerHTML = AFFIRMATION_CARDS.map(c => contentCardHTML(c)).join('');
+  document.getElementById('reflection-cards').innerHTML = REFLECTIONS.map(c => contentCardHTML(c)).join('');
+}
+
+function contentCardHTML(c) {
+  return `
+    <div class="content-card" onclick="openContent(${JSON.stringify(c).replace(/"/g, '&quot;')})">
+      <div class="content-card-header">
+        <span class="content-tag ${c.tagClass}">${c.tag}</span>
+        <div class="content-card-title">${c.title}</div>
+        <div class="content-card-desc">${c.desc}</div>
+      </div>
+      <div class="content-card-footer">
+        <span class="content-duration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${c.duration}
+        </span>
+        <button class="play-btn">
+          <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  if (history.length === 0) {
+    list.innerHTML = `<div style="text-align:center; padding: 40px 20px; color: var(--text-light);">
+      <div style="font-size: 40px; margin-bottom: 12px;">🌱</div>
+      <div style="font-size: 14px; line-height: 1.6;">Aún no hay registros.<br>¡Haz tu primer check-in hoy!</div>
+    </div>`;
+    return;
+  }
+  list.innerHTML = [...history].reverse().map(e => {
+    const mood = MOODS.find(m => m.label === e.mood) || MOODS[2];
+    return `
+      <div class="history-item">
+        <div class="history-emoji-circle" style="background:${mood.color}">${mood.emoji}</div>
+        <div class="history-info">
+          <div class="history-meta">
+            <span class="history-mood-name">${e.mood}</span>
+            <span class="history-score">Intensidad ${e.intensity}/10</span>
+          </div>
+          <div class="history-time">${e.date} — ${e.time}</div>
+          <div class="history-snippet">${e.journal || 'Sin nota'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateStats() {
+  document.getElementById('checkin-total').textContent = history.length;
+  if (history.length > 0) {
+    const avg = history.reduce((a, b) => a + (MOODS.find(m => m.label === b.mood)?.value || 5), 0) / history.length;
+    document.getElementById('avg-mood').textContent = avg.toFixed(1);
+  }
+  // Simple streak: count consecutive days
+  const today = new Date().toLocaleDateString('es-ES');
+  let streak = 0;
+  const days = [...new Set(history.map(h => h.date))].reverse();
+  for (let i = 0; i < days.length; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    if (days[i] === d.toLocaleDateString('es-ES')) streak++;
+    else break;
+  }
+  document.getElementById('streak-count').textContent = streak;
+}
+
+function renderWeekChart() {
+  const chart = document.getElementById('week-chart');
+  const days = ['L','M','X','J','V','S','D'];
+  const today = new Date();
+  const weekData = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(today.getDate() - i);
+    const dateStr = d.toLocaleDateString('es-ES');
+    const entries = history.filter(h => h.date === dateStr);
+    const avg = entries.length > 0
+      ? entries.reduce((a, b) => a + (MOODS.find(m => m.label === b.mood)?.value || 5), 0) / entries.length
+      : 0;
+    weekData.push({ day: days[d.getDay() === 0 ? 6 : d.getDay() - 1], value: avg });
+  }
+  const maxVal = Math.max(...weekData.map(d => d.value), 1);
+  chart.innerHTML = weekData.map(d => `
+    <div class="week-bar-wrap">
+      <div class="week-bar ${d.value > 0 ? 'filled' : ''}" style="height: ${d.value > 0 ? Math.round((d.value / 10) * 68) + 12 : 8}px;"></div>
+      <span class="week-bar-day">${d.day}</span>
+    </div>
+  `).join('');
+  if (history.length > 0) {
+    document.getElementById('week-note').textContent = 'Tu ánimo esta semana';
+  }
+}
+
+// ── INTERACTIONS ──────────────────────────────────────────────────────────────
+
+function selectMood(i) {
+  selectedMood = i;
+  document.querySelectorAll('.mood-btn').forEach((b, j) => b.classList.toggle('selected', j === i));
+}
+
+function toggleFactor(name, btn) {
+  if (selectedFactors.has(name)) {
+    selectedFactors.delete(name);
+    btn.style.background = '';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+  } else {
+    selectedFactors.add(name);
+    btn.style.background = 'var(--peach)';
+    btn.style.borderColor = 'var(--terracotta)';
+    btn.style.color = 'var(--rust)';
+  }
+}
+
+function newAffirmation() {
+  affirmationIdx = (affirmationIdx + 1) % AFFIRMATIONS.length;
+  const el = document.getElementById('daily-affirmation');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.textContent = AFFIRMATIONS[affirmationIdx];
+    el.style.transition = 'opacity 0.4s';
+    el.style.opacity = '1';
+  }, 200);
+}
+
+async function submitCheckin() {
+  if (selectedMood === null) { showToast('Selecciona cómo te sientes 🌸'); return; }
+
+  const mood = MOODS[selectedMood];
+  const intensity = document.getElementById('intensity-slider').value;
+  const journal = document.getElementById('journal-text').value.trim();
+  const factors = [...selectedFactors];
+  const now = new Date();
+
+  const entry = {
+    mood: mood.label,
+    emoji: mood.emoji,
+    intensity: parseInt(intensity),
+    journal,
+    factors,
+    date: now.toLocaleDateString('es-ES'),
+    time: now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+  };
+
+  history.push(entry);
+  localStorage.setItem('alma_history', JSON.stringify(history));
+
+  document.getElementById('checkin-form').style.display = 'none';
+  const done = document.getElementById('checkin-done');
+  done.classList.add('visible');
+
+  renderHistory();
+  updateStats();
+  renderWeekChart();
+
+  await getAIAdvice(mood.label, mood.emoji, intensity, journal, factors);
+}
+
+async function getAIAdvice(moodName, emoji, intensity, journal, factors) {
+  const adviceEl = document.getElementById('ai-advice-text');
+  const factorsText = factors.length > 0 ? `Factores que influyeron: ${factors.join(', ')}.` : '';
+  const journalText = journal ? `Nota personal: "${journal}".` : '';
+
+  const prompt = `Eres Alma, una asistente de bienestar emocional empática, cálida y cercana. El usuario acaba de hacer su check-in emocional.
+
+Estado: ${emoji} ${moodName} (intensidad ${intensity}/10).
+${factorsText}
+${journalText}
+
+Da un consejo corto, genuino y personal de 3-4 oraciones. Usa un tono cálido y humano, sin ser condescendiente. Incluye una pequeña acción concreta que pueda hacer HOY. No uses listas, escribe en párrafo continuo. Habla de tú a tú, en español.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(b => b.text || '').join('') || 'Cuídate mucho hoy. 🌸';
+    adviceEl.textContent = text;
+  } catch (e) {
+    adviceEl.textContent = `Reconocer cómo te sientes es ya un paso valiente. Hoy, date permiso de ser exactamente como estás — sin presión de sentirte de otra manera. Una pequeña cosa que podrías hacer: tomar 3 respiraciones profundas y decirte algo amable. 🌸`;
+  }
+}
+
+function goToCheckin() {
+  goToPage('page-checkin');
+  document.getElementById('checkin-form').style.display = 'block';
+  document.getElementById('checkin-done').classList.remove('visible');
+  selectedMood = null;
+  selectedFactors.clear();
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('journal-text').value = '';
+  renderFactors();
+}
+
+function goToPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const map = { 'page-home': 'nav-home', 'page-checkin': 'nav-checkin', 'page-explore': 'nav-explore', 'page-history': 'nav-history' };
+  if (map[pageId]) document.getElementById(map[pageId]).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function openContent(c) {
+  document.getElementById('content-modal-title').textContent = c.title;
+  document.getElementById('content-modal-sub').textContent = c.desc;
+  document.getElementById('content-modal-body').innerHTML = c.body.replace(/\n/g, '<br>');
+  document.getElementById('content-modal').classList.add('open');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id === 'breathing-modal') stopBreathing();
+}
+
+function openBreathing(e) {
+  if (e) e.stopPropagation();
+  document.getElementById('breathing-modal').classList.add('open');
+}
+
+// ── BREATHING EXERCISE ────────────────────────────────────────────────────────
+
+const PHASES = [
+  { name: 'Inhala...', dur: 4, cls: 'inhale', text: 'Inhala' },
+  { name: 'Sostén', dur: 4, cls: 'hold', text: 'Sostén' },
+  { name: 'Exhala...', dur: 4, cls: 'exhale', text: 'Exhala' },
+  { name: 'Pausa', dur: 2, cls: '', text: 'Pausa' },
+];
+
+let phaseIdx = 0;
+let phaseSec = 0;
+let totalCycles = 0;
+
+function toggleBreathing() {
+  if (breathingActive) { stopBreathing(); return; }
+  breathingActive = true;
+  document.getElementById('breath-btn').textContent = 'Detener';
+  phaseIdx = 0; phaseSec = PHASES[0].dur; totalCycles = 0;
+  runBreathPhase();
+  breathInterval = setInterval(breathTick, 1000);
+}
+
+function runBreathPhase() {
+  const p = PHASES[phaseIdx];
+  const circle = document.getElementById('breath-circle');
+  const phaseEl = document.getElementById('breath-phase');
+  const countEl = document.getElementById('breath-count');
+  circle.className = 'breathing-circle ' + p.cls;
+  circle.textContent = p.text;
+  phaseEl.textContent = p.name;
+  countEl.style.visibility = 'visible';
+  countEl.textContent = phaseSec;
+}
+
+function breathTick() {
+  phaseSec--;
+  document.getElementById('breath-count').textContent = phaseSec;
+  if (phaseSec <= 0) {
+    phaseIdx = (phaseIdx + 1) % PHASES.length;
+    if (phaseIdx === 0) {
+      totalCycles++;
+      if (totalCycles >= 4) { stopBreathing(); showToast('¡Ejercicio completado! 🌿'); return; }
+    }
+    phaseSec = PHASES[phaseIdx].dur;
+    runBreathPhase();
+  }
+}
+
+function stopBreathing() {
+  breathingActive = false;
+  clearInterval(breathInterval);
+  document.getElementById('breath-btn').textContent = 'Iniciar';
+  document.getElementById('breath-circle').className = 'breathing-circle';
+  document.getElementById('breath-circle').textContent = 'Presiona\niniciar';
+  document.getElementById('breath-phase').textContent = '¿Listo para empezar?';
+  document.getElementById('breath-count').style.visibility = 'hidden';
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      stopBreathing();
+    }
+  });
+});
+</script>
+</body>
+</html>
